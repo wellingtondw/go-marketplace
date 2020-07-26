@@ -26,6 +26,7 @@ import {
 import { useCart } from '../../hooks/cart';
 
 import formatValue from '../../utils/formatValue';
+import { getConstantValue } from 'typescript';
 
 interface Product {
   id: string;
@@ -39,23 +40,33 @@ const Cart: React.FC = () => {
   const { increment, decrement, products } = useCart();
 
   function handleIncrement(id: string): void {
-    // TODO
+    increment(id);
   }
 
   function handleDecrement(id: string): void {
-    // TODO
+    decrement(id);
   }
 
   const cartTotal = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
+    const productCartPrice = products.map(
+      product => product.price * product.quantity,
+    );
 
-    return formatValue(0);
+    const cardTotalValue = productCartPrice.reduce((accumulator, product) => {
+      const value = accumulator + product;
+
+      return value;
+    }, 0);
+
+    return formatValue(cardTotalValue);
   }, [products]);
 
   const totalItensInCart = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
+    const total = products.reduce((accumulator, currentProduct) => {
+      return accumulator + currentProduct.quantity;
+    }, 0);
 
-    return 0;
+    return total;
   }, [products]);
 
   return (
