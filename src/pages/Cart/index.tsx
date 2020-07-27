@@ -3,6 +3,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 
 import { View } from 'react-native';
 
+import { getConstantValue } from 'typescript';
 import {
   Container,
   ProductContainer,
@@ -26,7 +27,6 @@ import {
 import { useCart } from '../../hooks/cart';
 
 import formatValue from '../../utils/formatValue';
-import { getConstantValue } from 'typescript';
 
 interface Product {
   id: string;
@@ -48,17 +48,13 @@ const Cart: React.FC = () => {
   }
 
   const cartTotal = useMemo(() => {
-    const productCartPrice = products.map(
-      product => product.price * product.quantity,
-    );
+    const total = products.reduce((accumulator, product) => {
+      const productSubTotal = product.quantity * product.price;
 
-    const cardTotalValue = productCartPrice.reduce((accumulator, product) => {
-      const value = accumulator + product;
-
-      return value;
+      return accumulator + productSubTotal;
     }, 0);
 
-    return formatValue(cardTotalValue);
+    return formatValue(total);
   }, [products]);
 
   const totalItensInCart = useMemo(() => {
